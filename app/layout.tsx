@@ -1,14 +1,30 @@
-import type { Metadata } from "next";
-import { Inter } from "next/font/google";
+import type { Metadata, Viewport } from "next";
+import { DM_Sans, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
-import { SidebarNav } from "@/components/sidebar-nav";
 
-const inter = Inter({ subsets: ["latin"] });
+const dmSans = DM_Sans({
+  subsets: ["latin"],
+  variable: "--font-dm-sans",
+  display: "swap",
+});
+
+const jetbrainsMono = JetBrains_Mono({
+  subsets: ["latin"],
+  variable: "--font-jetbrains-mono",
+  display: "swap",
+});
 
 export const metadata: Metadata = {
   title: "Simulador Financiero — Arclo Systems",
   description: "Simulador de ingresos y tarifas publicitarias",
+};
+
+export const viewport: Viewport = {
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#f5f8fa" },
+    { media: "(prefers-color-scheme: dark)", color: "#1a1f35" },
+  ],
 };
 
 export default function RootLayout({
@@ -18,12 +34,9 @@ export default function RootLayout({
 }) {
   return (
     <html lang="es" suppressHydrationWarning>
-      <body className={inter.className}>
+      <body className={`${dmSans.variable} ${jetbrainsMono.variable} font-sans antialiased`}>
         <ThemeProvider>
-          <div className="flex h-screen">
-            <SidebarNav />
-            <main className="flex-1 overflow-auto p-6">{children}</main>
-          </div>
+          {children}
         </ThemeProvider>
       </body>
     </html>
