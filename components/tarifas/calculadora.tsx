@@ -58,12 +58,12 @@ export function Calculadora({ tipoCambio, onTipoCambioChange }: CalculadoraProps
       <CardContent className="space-y-6">
         <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
           <div className="space-y-2">
-            <Label>Audiencia</Label>
+            <Label htmlFor="calc-audiencia">Audiencia</Label>
             <Select
               value={audiencia}
               onValueChange={(v) => setAudiencia(v as AudienciaSlug)}
             >
-              <SelectTrigger className="w-full">
+              <SelectTrigger id="calc-audiencia" className="w-full">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
@@ -79,12 +79,12 @@ export function Calculadora({ tipoCambio, onTipoCambioChange }: CalculadoraProps
           </div>
 
           <div className="space-y-2">
-            <Label>Plan</Label>
+            <Label htmlFor="calc-plan">Plan</Label>
             <Select
               value={plan}
               onValueChange={(v) => setPlan(v as PlanPublicitario)}
             >
-              <SelectTrigger className="w-full">
+              <SelectTrigger id="calc-plan" className="w-full">
                 <SelectValue />
               </SelectTrigger>
               <SelectContent>
@@ -98,8 +98,9 @@ export function Calculadora({ tipoCambio, onTipoCambioChange }: CalculadoraProps
           </div>
 
           <div className="space-y-2">
-            <Label>{CANTIDAD_LABELS[plan]}</Label>
+            <Label htmlFor="calc-cantidad">{CANTIDAD_LABELS[plan]}</Label>
             <Input
+              id="calc-cantidad"
               type="number"
               min={0}
               value={cantidad}
@@ -109,10 +110,11 @@ export function Calculadora({ tipoCambio, onTipoCambioChange }: CalculadoraProps
 
           <div className="flex items-center gap-3 self-end pb-2">
             <Switch
+              id="calc-descuento"
               checked={todosLosEspacios}
               onCheckedChange={setTodosLosEspacios}
             />
-            <Label>Descuento 25% (todos los espacios)</Label>
+            <Label htmlFor="calc-descuento">Descuento 25% (todos los espacios)</Label>
           </div>
 
           <div className="space-y-2">

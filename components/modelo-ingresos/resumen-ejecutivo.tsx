@@ -47,177 +47,148 @@ interface ResumenEjecutivoProps {
   tipoCambio: number;
 }
 
+const METRIC_CARDS = [
+  { key: "ingresoBruto", label: "Ingreso Bruto Anual" },
+  { key: "utilidadNeta", label: "Utilidad Neta Anual" },
+  { key: "cargaTributaria", label: "Carga Tributaria" },
+  { key: "dividendo", label: "Dividendo Mensual/Socio" },
+  { key: "usuarios", label: "Usuarios Totales" },
+  { key: "arpu", label: "ARPU" },
+] as const;
+
 export function ResumenEjecutivo({
   resultadoAnual,
   resumenUsuarios,
   datosMensuales,
   tipoCambio,
 }: ResumenEjecutivoProps) {
-  const pieData = [
-    { name: "Comisiones", value: resultadoAnual.comisionesAnuales, color: "#f97316" },
+  const pieDataRaw = [
+    { name: "Comisiones", value: resultadoAnual.comisionesAnuales, color: "#f59e0b" },
     { name: "IVA Neto", value: resultadoAnual.ivaNeto, color: "#eab308" },
     { name: "Gastos Op.", value: resultadoAnual.gastosOperativosAnuales, color: "#3b82f6" },
-    { name: "ISR", value: resultadoAnual.isr, color: "#ef4444" },
+    { name: "ISR", value: resultadoAnual.isr, color: "#f43f5e" },
     { name: "Imp. Dividendos", value: resultadoAnual.impuestoDividendos, color: "#a855f7" },
-    { name: "Utilidad Neta", value: resultadoAnual.utilidadNeta, color: "#22c55e" },
+    { name: "Utilidad Neta", value: resultadoAnual.utilidadNeta, color: "#14b8a6" },
   ];
+
+  const pieData = pieDataRaw.filter((d) => d.value > 0);
+  const hasPieData = pieData.length > 0;
 
   const cargaPorcentaje =
     resultadoAnual.ingresoBrutoAnual > 0
       ? resultadoAnual.cargaTributariaTotal / resultadoAnual.ingresoBrutoAnual
       : 0;
 
+  function renderMetricCard(key: (typeof METRIC_CARDS)[number]["key"], label: string, index: number) {
+    let primary: string;
+    let secondary: string;
+
+    switch (key) {
+      case "ingresoBruto":
+        primary = formatCRC(resultadoAnual.ingresoBrutoAnual);
+        secondary = formatUSD(resultadoAnual.ingresoBrutoAnual / tipoCambio);
+        break;
+      case "utilidadNeta":
+        primary = formatCRC(resultadoAnual.utilidadNeta);
+        secondary = formatUSD(resultadoAnual.utilidadNeta / tipoCambio);
+        break;
+      case "cargaTributaria":
+        primary = formatCRC(resultadoAnual.cargaTributariaTotal);
+        secondary = `${formatPercent(cargaPorcentaje)} del ingreso bruto`;
+        break;
+      case "dividendo":
+        primary = formatCRC(resultadoAnual.dividendoMensualPorSocio);
+        secondary = formatUSD(resultadoAnual.dividendoMensualPorSocio / tipoCambio);
+        break;
+      case "usuarios":
+        primary = formatNumber(resumenUsuarios.totalUsuarios);
+        secondary = Object.entries(resumenUsuarios.usuariosPorPlan)
+          .map(([plan, cantidad]) => `${plan}: ${formatNumber(cantidad)}`)
+          .join(" · ") +
+          (resumenUsuarios.usuariosFree > 0
+            ? ` · Free: ${formatNumber(resumenUsuarios.usuariosFree)}`
+            : "");
+        break;
+      case "arpu":
+        primary = formatUSD(resumenUsuarios.arpu);
+        secondary = "Ingreso promedio por usuario";
+        break;
+    }
+
+    return (
+      <Card key={key} className={`animate-fade-in-up stagger-${index + 1}`}>
+        <CardHeader className="pb-2">
+          <CardTitle className="text-xs font-medium tracking-wide uppercase text-muted-foreground">
+            {label}
+          </CardTitle>
+        </CardHeader>
+        <CardContent>
+          <p className="text-2xl font-bold tabular-nums">{primary}</p>
+          <p className="mt-0.5 text-sm text-muted-foreground truncate">{secondary}</p>
+        </CardContent>
+      </Card>
+    );
+  }
+
   return (
     <div className="space-y-6">
-      <div className="grid grid-cols-1 gap-4 md:grid-cols-3">
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-sm font-medium text-muted-foreground">
-              Ingreso Bruto Anual
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-2xl font-bold">
-              {formatCRC(resultadoAnual.ingresoBrutoAnual)}
-            </p>
-            <p className="text-sm text-muted-foreground">
-              {formatUSD(resultadoAnual.ingresoBrutoAnual / tipoCambio)}
-            </p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-sm font-medium text-muted-foreground">
-              Utilidad Neta Anual
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-2xl font-bold">
-              {formatCRC(resultadoAnual.utilidadNeta)}
-            </p>
-            <p className="text-sm text-muted-foreground">
-              {formatUSD(resultadoAnual.utilidadNeta / tipoCambio)}
-            </p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-sm font-medium text-muted-foreground">
-              Carga Tributaria
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-2xl font-bold">
-              {formatCRC(resultadoAnual.cargaTributariaTotal)}
-            </p>
-            <p className="text-sm text-muted-foreground">
-              {formatPercent(cargaPorcentaje)} del ingreso bruto
-            </p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-sm font-medium text-muted-foreground">
-              Dividendo Mensual/Socio
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-2xl font-bold">
-              {formatCRC(resultadoAnual.dividendoMensualPorSocio)}
-            </p>
-            <p className="text-sm text-muted-foreground">
-              {formatUSD(resultadoAnual.dividendoMensualPorSocio / tipoCambio)}
-            </p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-sm font-medium text-muted-foreground">
-              Usuarios Totales
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-2xl font-bold">
-              {formatNumber(resumenUsuarios.totalUsuarios)}
-            </p>
-            <p className="text-sm text-muted-foreground">
-              {Object.entries(resumenUsuarios.usuariosPorPlan)
-                .map(([plan, cantidad]) => `${plan}: ${formatNumber(cantidad)}`)
-                .join(" · ")}
-              {resumenUsuarios.usuariosFree > 0 &&
-                ` · Free: ${formatNumber(resumenUsuarios.usuariosFree)}`}
-            </p>
-          </CardContent>
-        </Card>
-
-        <Card>
-          <CardHeader>
-            <CardTitle className="text-sm font-medium text-muted-foreground">
-              ARPU
-            </CardTitle>
-          </CardHeader>
-          <CardContent>
-            <p className="text-2xl font-bold">
-              {formatUSD(resumenUsuarios.arpu)}
-            </p>
-            <p className="text-sm text-muted-foreground">
-              Ingreso promedio por usuario
-            </p>
-          </CardContent>
-        </Card>
+      <div className="grid grid-cols-1 gap-4 sm:grid-cols-2 md:grid-cols-3">
+        {METRIC_CARDS.map((card, i) => renderMetricCard(card.key, card.label, i))}
       </div>
 
       <div className="grid grid-cols-1 gap-4 md:grid-cols-2">
-        <Card>
+        <Card className="animate-scale-in">
           <CardHeader>
             <CardTitle>Distribución del Ingreso Bruto</CardTitle>
           </CardHeader>
           <CardContent>
-            <ResponsiveContainer width="100%" height={300}>
-              <PieChart>
-                <Pie
-                  data={pieData}
-                  dataKey="value"
-                  nameKey="name"
-                  cx="50%"
-                  cy="50%"
-                  outerRadius={100}
-                  label={({ name, percent }: { name?: string; percent?: number }) =>
-                    `${name ?? ""} ${((percent ?? 0) * 100).toFixed(1)}%`
-                  }
-                >
-                  {pieData.map((entry) => (
-                    <Cell key={entry.name} fill={entry.color} />
-                  ))}
-                </Pie>
-                <Tooltip
-                  formatter={(value?: number | string) =>
-                    formatCRC(
-                      typeof value === "string"
-                        ? parseFloat(value)
-                        : (value ?? 0)
-                    )
-                  }
-                />
-                <Legend />
-              </PieChart>
-            </ResponsiveContainer>
+            {hasPieData ? (
+              <ResponsiveContainer width="100%" height={300}>
+                <PieChart>
+                  <Pie
+                    data={pieData}
+                    dataKey="value"
+                    nameKey="name"
+                    cx="50%"
+                    cy="50%"
+                    outerRadius={100}
+                    label={({ name, percent }: { name?: string; percent?: number }) =>
+                      `${name ?? ""} ${((percent ?? 0) * 100).toFixed(1)}%`
+                    }
+                  >
+                    {pieData.map((entry) => (
+                      <Cell key={entry.name} fill={entry.color} />
+                    ))}
+                  </Pie>
+                  <Tooltip
+                    formatter={(value?: number | string) =>
+                      formatCRC(
+                        typeof value === "string"
+                          ? parseFloat(value)
+                          : (value ?? 0)
+                      )
+                    }
+                  />
+                  <Legend />
+                </PieChart>
+              </ResponsiveContainer>
+            ) : (
+              <div className="flex h-[300px] items-center justify-center text-sm text-muted-foreground">
+                Ingrese usuarios para ver la distribución
+              </div>
+            )}
           </CardContent>
         </Card>
 
-        <Card>
+        <Card className="animate-scale-in stagger-1">
           <CardHeader>
             <CardTitle>Ingresos vs Gastos Mensuales</CardTitle>
           </CardHeader>
           <CardContent>
             <ResponsiveContainer width="100%" height={300}>
               <BarChart data={datosMensuales}>
-                <XAxis dataKey="mes" />
-                <YAxis />
+                <XAxis dataKey="mes" tick={{ fontSize: 12 }} />
+                <YAxis tick={{ fontSize: 12 }} />
                 <Tooltip
                   formatter={(value?: number | string) =>
                     formatCRC(
@@ -228,8 +199,8 @@ export function ResumenEjecutivo({
                   }
                 />
                 <Legend />
-                <Bar dataKey="ingresos" name="Ingresos" fill="#22c55e" />
-                <Bar dataKey="gastos" name="Gastos" fill="#ef4444" />
+                <Bar dataKey="ingresos" name="Ingresos" fill="#14b8a6" radius={[3, 3, 0, 0]} />
+                <Bar dataKey="gastos" name="Gastos" fill="#f43f5e" radius={[3, 3, 0, 0]} />
               </BarChart>
             </ResponsiveContainer>
           </CardContent>

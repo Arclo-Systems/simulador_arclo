@@ -224,8 +224,12 @@ export function ModeloMensual({
                   return (
                     <TableCell
                       key={i}
-                      className="text-right bg-blue-50 dark:bg-blue-950/20 cursor-pointer"
+                      className="text-right bg-blue-50/50 dark:bg-blue-950/20 cursor-pointer hover:bg-blue-100/70 dark:hover:bg-blue-900/30 transition-colors"
                       onClick={() => handleCellClick(i)}
+                      role="button"
+                      tabIndex={0}
+                      onKeyDown={(e) => { if (e.key === "Enter" || e.key === " ") handleCellClick(i); }}
+                      aria-label={`Editar ingreso bruto ${MESES[i]}`}
                     >
                       {isEditing ? (
                         <Input
@@ -236,6 +240,7 @@ export function ModeloMensual({
                           onBlur={(e) => handleInputBlur(i, e.target.value)}
                           onKeyDown={(e) => handleInputKeyDown(e, i)}
                           className="h-7 w-24 text-xs text-right font-mono px-1.5"
+                          aria-label={`Ingreso bruto ${MESES[i]}`}
                         />
                       ) : (
                         <span className="font-mono text-xs text-green-700 dark:text-green-400">

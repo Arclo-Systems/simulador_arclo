@@ -80,6 +80,7 @@ export function calcularISR(
   umbralTarifaPlena: number,
   tasaPlena: number
 ): number {
+  if (utilidadGravable <= 0) return 0;
   if (ingresoBrutoAnual > umbralTarifaPlena) {
     return utilidadGravable * tasaPlena;
   }
@@ -91,6 +92,7 @@ export function calcularDividendos(
   tasaDividendos: number,
   numSocios: number
 ): { impuesto: number; totalDividendos: number; porSocio: number } {
+  if (utilidadNeta <= 0) return { impuesto: 0, totalDividendos: 0, porSocio: 0 };
   const impuesto = utilidadNeta * tasaDividendos;
   const totalDividendos = utilidadNeta - impuesto;
   return { impuesto, totalDividendos, porSocio: totalDividendos / numSocios };

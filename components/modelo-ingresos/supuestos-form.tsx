@@ -145,6 +145,7 @@ export function SupuestosForm({ supuestos, onChange }: SupuestosFormProps) {
                       type="number"
                       value={tramo.hasta}
                       onChange={(e) => updateTramo(i, "hasta", e.target.value)}
+                      aria-label={`Límite superior tramo ${tramo.nota}`}
                     />
                   </TableCell>
                   <TableCell>
@@ -153,6 +154,7 @@ export function SupuestosForm({ supuestos, onChange }: SupuestosFormProps) {
                       step="0.1"
                       value={+(tramo.tasa * 100).toFixed(4)}
                       onChange={(e) => updateTramo(i, "tasa", e.target.value)}
+                      aria-label={`Tasa ISR tramo ${tramo.nota}`}
                     />
                   </TableCell>
                 </TableRow>
@@ -293,6 +295,7 @@ export function SupuestosForm({ supuestos, onChange }: SupuestosFormProps) {
                       type="number"
                       value={gasto.montoMensualCRC}
                       onChange={(e) => updateGasto(i, e.target.value)}
+                      aria-label={`Monto mensual ${gasto.concepto}`}
                     />
                   </TableCell>
                   <TableCell className="text-muted-foreground text-sm">
@@ -336,6 +339,7 @@ export function SupuestosForm({ supuestos, onChange }: SupuestosFormProps) {
                       onChange={(e) =>
                         updateDistribucion(i, "porcentaje", e.target.value)
                       }
+                      aria-label={`Porcentaje ${linea.nombre}`}
                     />
                   </TableCell>
                   <TableCell>
@@ -346,6 +350,7 @@ export function SupuestosForm({ supuestos, onChange }: SupuestosFormProps) {
                       onChange={(e) =>
                         updateDistribucion(i, "comisionPlataforma", e.target.value)
                       }
+                      aria-label={`Comisión plataforma ${linea.nombre}`}
                     />
                   </TableCell>
                 </TableRow>

@@ -1,6 +1,6 @@
 "use client";
 
-import { useCallback, useMemo } from "react";
+import { Fragment, useCallback, useMemo } from "react";
 import type {
   TierInput,
   PlanSlug,
@@ -120,16 +120,14 @@ export function UsuariosPorPlan({
   }, [columnTotals, tipoCambio]);
 
   const totalProUsers = useMemo(() => {
-    return tierInputs
-      .filter((t) => t.plan === "pro")
-      .reduce((sum, t) => sum + t.usuarios, 0);
+    return tierInputs.reduce((sum, t) => t.plan === "pro" ? sum + t.usuarios : sum, 0);
   }, [tierInputs]);
 
   const costoIA = totalProUsers * COSTO_IA_POR_USUARIO_MES_USD;
 
   const renderPlanSection = (plan: PlanSlug) => (
-    <>
-      <TableRow key={`header-${plan}`}>
+    <Fragment key={plan}>
+      <TableRow>
         <TableCell
           colSpan={6}
           className="bg-muted/50 font-semibold text-xs uppercase tracking-wider"
@@ -169,6 +167,7 @@ export function UsuariosPorPlan({
                         )
                       }
                       className="h-7 w-20 text-xs px-1.5"
+                      aria-label={`Usuarios ${PLAN_LABELS[plan]} ${PERIOD_LABELS[period]} ${moduleLabel(mc)}`}
                     />
                   </div>
                 </TableCell>
@@ -180,7 +179,7 @@ export function UsuariosPorPlan({
           </TableRow>
         );
       })}
-    </>
+    </Fragment>
   );
 
   return (
@@ -210,7 +209,7 @@ export function UsuariosPorPlan({
                 Total Usuarios
               </TableCell>
               {columnTotals.map((col, i) => (
-                <TableCell key={i} className="text-center font-mono text-xs">
+                <TableCell key={i} className="text-center font-mono text-xs tabular-nums">
                   {col.users}
                 </TableCell>
               ))}

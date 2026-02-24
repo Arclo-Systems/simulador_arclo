@@ -97,6 +97,7 @@ function TarifaRow({
           onBlur={handleBlur}
           onKeyDown={handleKeyDown}
           className="h-7 w-24 text-xs text-right font-mono px-1.5"
+          aria-label={`Precio base ${AUDIENCIA_LABELS[audienciaKey] ?? audienciaKey}`}
         />
       </TableCell>
       <TableCell className="text-right font-mono text-xs text-green-700 dark:text-green-400">
