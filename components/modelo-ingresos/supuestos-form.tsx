@@ -1,6 +1,6 @@
 "use client";
 
-import type { Supuestos, TramoISR, GastoOperativo, DistribucionLinea } from "@/types";
+import type { Supuestos, TramoISR, DistribucionLinea } from "@/types";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
