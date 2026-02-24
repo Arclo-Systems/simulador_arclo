@@ -48,7 +48,7 @@ lib/
   constants.ts                        Pricing tiers, ISR brackets, defaults
   format.ts                           CRC/USD/percent formatters
 types/index.ts                        All TypeScript interfaces
-middleware.ts                         Auth route protection
+proxy.ts                              Auth route protection (Edge proxy)
 ```
 
 ## Architecture Decisions
