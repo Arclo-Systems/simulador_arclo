@@ -167,7 +167,8 @@ export default function ModeloIngresosPage() {
     const dividendos = calcularDividendos(
       utilidadPostISR,
       state.supuestos.tasaDividendos,
-      state.supuestos.numSocios
+      state.supuestos.numSocios,
+      state.supuestos.tasaReinversion
     );
     const utilidadNeta = dividendos.totalDividendos;
     const cargaTributariaTotal =
@@ -181,6 +182,7 @@ export default function ModeloIngresosPage() {
       utilidadGravable,
       isr,
       utilidadPostISR,
+      reinversion: dividendos.reinversion,
       impuestoDividendos: dividendos.impuesto,
       utilidadNeta,
       dividendoPorSocio: dividendos.porSocio,
@@ -194,6 +196,7 @@ export default function ModeloIngresosPage() {
     state.supuestos.umbralTarifaPlena,
     state.supuestos.tasaPlena,
     state.supuestos.tasaDividendos,
+    state.supuestos.tasaReinversion,
     state.supuestos.numSocios,
   ]);
 

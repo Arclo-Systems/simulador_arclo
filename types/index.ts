@@ -39,6 +39,7 @@ export interface Supuestos {
   umbralTarifaPlena: number;
   tasaPlena: number;
   tasaDividendos: number;
+  tasaReinversion: number;
   comisionInApp: number;
   comisionSINPE: number;
   comisionPasarela: number;
@@ -76,6 +77,7 @@ export interface ResultadoAnual {
   utilidadGravable: number;
   isr: number;
   utilidadPostISR: number;
+  reinversion: number;
   impuestoDividendos: number;
   utilidadNeta: number;
   dividendoPorSocio: number;

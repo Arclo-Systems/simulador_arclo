@@ -24,6 +24,7 @@ interface ResumenEjecutivoProps {
     utilidadGravable: number;
     isr: number;
     utilidadPostISR: number;
+    reinversion: number;
     impuestoDividendos: number;
     utilidadNeta: number;
     dividendoPorSocio: number;
@@ -51,6 +52,7 @@ const METRIC_CARDS = [
   { key: "ingresoBruto", label: "Ingreso Bruto Anual" },
   { key: "utilidadNeta", label: "Utilidad Neta Anual" },
   { key: "cargaTributaria", label: "Carga Tributaria" },
+  { key: "reinversion", label: "Reinversión (20%)" },
   { key: "dividendo", label: "Dividendo Mensual/Socio" },
   { key: "usuarios", label: "Usuarios Totales" },
   { key: "arpu", label: "ARPU" },
@@ -68,7 +70,8 @@ export function ResumenEjecutivo({
     { name: "Gastos Op.", value: resultadoAnual.gastosOperativosAnuales, color: "#3b82f6" },
     { name: "ISR", value: resultadoAnual.isr, color: "#f43f5e" },
     { name: "Imp. Dividendos", value: resultadoAnual.impuestoDividendos, color: "#a855f7" },
-    { name: "Utilidad Neta", value: resultadoAnual.utilidadNeta, color: "#14b8a6" },
+    { name: "Reinversión", value: resultadoAnual.reinversion, color: "#6366f1" },
+    { name: "Dividendos Netos", value: resultadoAnual.utilidadNeta, color: "#14b8a6" },
   ];
 
   const pieData = pieDataRaw.filter((d) => d.value > 0);
@@ -95,6 +98,10 @@ export function ResumenEjecutivo({
       case "cargaTributaria":
         primary = formatCRC(resultadoAnual.cargaTributariaTotal);
         secondary = `${formatPercent(cargaPorcentaje)} del ingreso bruto`;
+        break;
+      case "reinversion":
+        primary = formatCRC(resultadoAnual.reinversion);
+        secondary = formatUSD(resultadoAnual.reinversion / tipoCambio);
         break;
       case "dividendo":
         primary = formatCRC(resultadoAnual.dividendoMensualPorSocio);

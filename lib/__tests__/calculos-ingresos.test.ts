@@ -104,11 +104,13 @@ describe("calcularISR", () => {
 });
 
 describe("calcularDividendos", () => {
-  it("splits net income among partners after dividend tax", () => {
-    const result = calcularDividendos(10_000_000, 0.15, 4);
-    expect(result.impuesto).toBeCloseTo(1_500_000);
-    expect(result.totalDividendos).toBeCloseTo(8_500_000);
-    expect(result.porSocio).toBeCloseTo(2_125_000);
+  it("deducts reinvestment, then splits among partners after dividend tax", () => {
+    const result = calcularDividendos(10_000_000, 0.15, 4, 0.2);
+    expect(result.reinversion).toBeCloseTo(2_000_000);
+    expect(result.distributable).toBeCloseTo(8_000_000);
+    expect(result.impuesto).toBeCloseTo(1_200_000);
+    expect(result.totalDividendos).toBeCloseTo(6_800_000);
+    expect(result.porSocio).toBeCloseTo(1_700_000);
   });
 });
 

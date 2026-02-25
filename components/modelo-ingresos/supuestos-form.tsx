@@ -206,6 +206,16 @@ export function SupuestosForm({ supuestos, onChange }: SupuestosFormProps) {
               />
             </div>
             <div className="space-y-2">
+              <Label htmlFor="tasaReinversion">Reinversi&oacute;n (%)</Label>
+              <Input
+                id="tasaReinversion"
+                type="number"
+                step="0.1"
+                value={+(supuestos.tasaReinversion * 100).toFixed(4)}
+                onChange={(e) => updatePercentField("tasaReinversion", e.target.value)}
+              />
+            </div>
+            <div className="space-y-2">
               <Label htmlFor="comisionInApp">Comisi&oacute;n In-App (%)</Label>
               <Input
                 id="comisionInApp"

@@ -90,12 +90,16 @@ export function calcularISR(
 export function calcularDividendos(
   utilidadNeta: number,
   tasaDividendos: number,
-  numSocios: number
-): { impuesto: number; totalDividendos: number; porSocio: number } {
-  if (utilidadNeta <= 0) return { impuesto: 0, totalDividendos: 0, porSocio: 0 };
-  const impuesto = utilidadNeta * tasaDividendos;
-  const totalDividendos = utilidadNeta - impuesto;
-  return { impuesto, totalDividendos, porSocio: totalDividendos / numSocios };
+  numSocios: number,
+  tasaReinversion: number
+): { reinversion: number; distributable: number; impuesto: number; totalDividendos: number; porSocio: number } {
+  if (utilidadNeta <= 0) return { reinversion: 0, distributable: 0, impuesto: 0, totalDividendos: 0, porSocio: 0 };
+  const reinversion = utilidadNeta * tasaReinversion;
+  const distributable = utilidadNeta - reinversion;
+  const brutoPorSocio = distributable / numSocios;
+  const impuesto = brutoPorSocio * tasaDividendos * numSocios;
+  const totalDividendos = distributable - impuesto;
+  return { reinversion, distributable, impuesto, totalDividendos, porSocio: totalDividendos / numSocios };
 }
 
 export function calcularCostoIA(

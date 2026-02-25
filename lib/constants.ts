@@ -71,6 +71,7 @@ export const DEFAULT_SUPUESTOS: Supuestos = {
   umbralTarifaPlena: 112_170_000,
   tasaPlena: 0.3,
   tasaDividendos: 0.15,
+  tasaReinversion: 0.2,
   comisionInApp: 0.15,
   comisionSINPE: 0,
   comisionPasarela: 0,
