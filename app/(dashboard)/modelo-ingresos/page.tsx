@@ -6,7 +6,6 @@ import type { Supuestos, TierInput, PlanSlug } from "@/types";
 import {
   DEFAULT_SUPUESTOS,
   PRICING_TIERS,
-  COSTO_IA_POR_USUARIO_MES_USD,
   MESES,
 } from "@/lib/constants";
 import {
@@ -89,10 +88,10 @@ export default function ModeloIngresosPage() {
     () =>
       calcularCostoIA(
         totalProUsers,
-        COSTO_IA_POR_USUARIO_MES_USD,
+        state.supuestos.costoIAPorUsuarioUSD,
         state.supuestos.tipoCambio
       ),
-    [totalProUsers, state.supuestos.tipoCambio]
+    [totalProUsers, state.supuestos.costoIAPorUsuarioUSD, state.supuestos.tipoCambio]
   );
 
   const totalGastosOp = useMemo(
@@ -274,6 +273,7 @@ export default function ModeloIngresosPage() {
           dispatch({ type: "SET_INGRESOS_PATROCINADORES", payload: n })
         }
         tipoCambio={state.supuestos.tipoCambio}
+        costoIAPorUsuarioUSD={state.supuestos.costoIAPorUsuarioUSD}
       />
 
       <ModeloMensual

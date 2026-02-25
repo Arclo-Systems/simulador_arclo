@@ -10,7 +10,6 @@ import type {
 import {
   PLAN_LABELS,
   PERIOD_LABELS,
-  COSTO_IA_POR_USUARIO_MES_USD,
 } from "@/lib/constants";
 import { formatUSD, formatCRC } from "@/lib/format";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
@@ -34,6 +33,7 @@ interface UsuariosPorPlanProps {
   ingresosPatrocinadores: number;
   onIngresosPatrocinadoresChange: (n: number) => void;
   tipoCambio: number;
+  costoIAPorUsuarioUSD: number;
 }
 
 const PLANS: PlanSlug[] = ["basico", "plus", "pro"];
@@ -66,6 +66,7 @@ export function UsuariosPorPlan({
   ingresosPatrocinadores,
   onIngresosPatrocinadoresChange,
   tipoCambio,
+  costoIAPorUsuarioUSD,
 }: UsuariosPorPlanProps) {
   const handleUsuariosChange = useCallback(
     (plan: PlanSlug, period: PeriodSlug, moduleCount: ModuleCount, value: number) => {
@@ -122,7 +123,7 @@ export function UsuariosPorPlan({
     return tierInputs.reduce((sum, t) => t.plan === "pro" ? sum + t.usuarios : sum, 0);
   }, [tierInputs]);
 
-  const costoIA = totalProUsers * COSTO_IA_POR_USUARIO_MES_USD;
+  const costoIA = totalProUsers * costoIAPorUsuarioUSD;
 
   const renderPlanSection = (plan: PlanSlug) => (
     <Fragment key={plan}>
@@ -296,7 +297,7 @@ export function UsuariosPorPlan({
             <div className="flex h-8 items-center rounded-md border bg-muted px-3 text-sm font-mono">
               {formatUSD(costoIA)}
               <span className="ml-1 text-xs text-muted-foreground">
-                ({totalProUsers} Pro x ${COSTO_IA_POR_USUARIO_MES_USD}/mes)
+                ({totalProUsers} Pro x ${costoIAPorUsuarioUSD}/mes)
               </span>
             </div>
           </div>

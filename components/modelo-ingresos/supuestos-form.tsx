@@ -12,7 +12,7 @@ import {
   TableHeader,
   TableRow,
 } from "@/components/ui/table";
-import { formatCRC } from "@/lib/format";
+import { formatCRC, formatUSD } from "@/lib/format";
 
 interface SupuestosFormProps {
   supuestos: Supuestos;
@@ -313,6 +313,22 @@ export function SupuestosForm({ supuestos, onChange }: SupuestosFormProps) {
                   </TableCell>
                 </TableRow>
               ))}
+              <TableRow>
+                <TableCell className="text-sm">Costo IA por usuario Pro (USD/mes)</TableCell>
+                <TableCell>
+                  <Input
+                    type="number"
+                    step="0.01"
+                    min={0}
+                    value={supuestos.costoIAPorUsuarioUSD}
+                    onChange={(e) => updateField("costoIAPorUsuarioUSD", parseNum(e.target.value))}
+                    aria-label="Costo IA por usuario Pro"
+                  />
+                </TableCell>
+                <TableCell className="text-muted-foreground text-sm">
+                  {formatUSD(supuestos.costoIAPorUsuarioUSD)}/usuario Pro/mes
+                </TableCell>
+              </TableRow>
               <TableRow className="font-semibold">
                 <TableCell>Total</TableCell>
                 <TableCell>{formatCRC(totalGastos)}</TableCell>

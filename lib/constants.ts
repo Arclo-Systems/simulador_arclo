@@ -78,6 +78,7 @@ export const DEFAULT_SUPUESTOS: Supuestos = {
   patenteMunicipal: 0,
   timbresEducacion: 0,
   numSocios: 4,
+  costoIAPorUsuarioUSD: 1,
   gastosOperativos: DEFAULT_GASTOS,
   distribucionLineas: DEFAULT_DISTRIBUCION,
 };
@@ -110,8 +111,6 @@ export const VOLUMENES_CPM = [1_000, 5_000, 10_000, 50_000, 100_000];
 export const VOLUMENES_CPC = [100, 500, 1_000, 5_000, 10_000];
 
 export const DESCUENTO_TODOS_ESPACIOS = 0.25;
-
-export const COSTO_IA_POR_USUARIO_MES_USD = 1;
 
 export const PLAN_LABELS: Record<string, string> = {
   basico: "Básico",

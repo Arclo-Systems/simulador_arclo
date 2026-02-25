@@ -150,7 +150,7 @@ export function ResumenEjecutivo({
           </CardHeader>
           <CardContent>
             {hasPieData ? (
-              <ResponsiveContainer width="100%" height={300}>
+              <ResponsiveContainer width="100%" height={350}>
                 <PieChart>
                   <Pie
                     data={pieData}
@@ -158,10 +158,11 @@ export function ResumenEjecutivo({
                     nameKey="name"
                     cx="50%"
                     cy="50%"
-                    outerRadius={100}
+                    outerRadius={90}
                     label={({ name, percent }: { name?: string; percent?: number }) =>
                       `${name ?? ""} ${((percent ?? 0) * 100).toFixed(1)}%`
                     }
+                    style={{ fontSize: 12 }}
                   >
                     {pieData.map((entry) => (
                       <Cell key={entry.name} fill={entry.color} />

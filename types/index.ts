@@ -46,6 +46,7 @@ export interface Supuestos {
   patenteMunicipal: number;
   timbresEducacion: number;
   numSocios: number;
+  costoIAPorUsuarioUSD: number;
   gastosOperativos: GastoOperativo[];
   distribucionLineas: DistribucionLinea[];
 }
