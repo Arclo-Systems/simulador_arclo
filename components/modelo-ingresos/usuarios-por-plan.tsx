@@ -13,7 +13,6 @@ import {
   COSTO_IA_POR_USUARIO_MES_USD,
 } from "@/lib/constants";
 import { formatUSD, formatCRC } from "@/lib/format";
-import { calcularIngresoPorTier } from "@/lib/calculos-ingresos";
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -85,7 +84,7 @@ export function UsuariosPorPlan({
       return MODULE_COUNTS.reduce((sum, mc) => {
         const tier = findTier(tierInputs, plan, period, mc);
         if (!tier) return sum;
-        return sum + calcularIngresoPorTier(tier.usuarios, tier.priceUSD, 1).usd;
+        return sum + tier.usuarios * tier.priceCRC;
       }, 0);
     },
     [tierInputs]
@@ -100,7 +99,7 @@ export function UsuariosPorPlan({
           const tier = findTier(tierInputs, plan, period, mc);
           if (tier) {
             users += tier.usuarios;
-            revenue += calcularIngresoPorTier(tier.usuarios, tier.priceUSD, 1).usd;
+            revenue += tier.usuarios * tier.priceCRC;
           }
         }
       }
@@ -110,12 +109,12 @@ export function UsuariosPorPlan({
 
   const grandTotal = useMemo(() => {
     const users = columnTotals.reduce((s, c) => s + c.users, 0);
-    const revenueUSD = columnTotals.reduce((s, c) => s + c.revenue, 0);
+    const revenueCRC = columnTotals.reduce((s, c) => s + c.revenue, 0);
     return {
       users,
-      revenueUSD,
-      revenueCRC: revenueUSD * tipoCambio,
-      arpu: users > 0 ? revenueUSD / users : 0,
+      revenueCRC,
+      revenueUSD: revenueCRC / tipoCambio,
+      arpu: users > 0 ? revenueCRC / users : 0,
     };
   }, [columnTotals, tipoCambio]);
 
@@ -152,7 +151,7 @@ export function UsuariosPorPlan({
                 >
                   <div className="flex flex-col gap-0.5">
                     <span className="text-[10px] text-muted-foreground">
-                      {formatUSD(tier.priceUSD)}
+                      {formatCRC(tier.priceCRC)}
                     </span>
                     <Input
                       type="number"
@@ -174,7 +173,7 @@ export function UsuariosPorPlan({
               );
             })}
             <TableCell className="bg-green-50 dark:bg-green-950/20 text-right font-mono text-xs">
-              {formatUSD(rev)}
+              {formatCRC(rev)}
             </TableCell>
           </TableRow>
         );
@@ -226,33 +225,33 @@ export function UsuariosPorPlan({
                   key={i}
                   className="bg-green-50 dark:bg-green-950/20 text-center font-mono text-xs"
                 >
-                  {formatUSD(col.revenue)}
+                  {formatCRC(col.revenue)}
                 </TableCell>
               ))}
-              <TableCell className="bg-green-50 dark:bg-green-950/20 text-right font-mono text-xs font-semibold">
-                {formatUSD(grandTotal.revenueUSD)}
-              </TableCell>
-            </TableRow>
-            <TableRow>
-              <TableCell className="font-semibold text-xs">
-                Total CRC
-              </TableCell>
-              <TableCell
-                colSpan={4}
-              />
               <TableCell className="bg-green-50 dark:bg-green-950/20 text-right font-mono text-xs font-semibold">
                 {formatCRC(grandTotal.revenueCRC)}
               </TableCell>
             </TableRow>
             <TableRow>
               <TableCell className="font-semibold text-xs">
-                ARPU (USD)
+                Total USD
+              </TableCell>
+              <TableCell
+                colSpan={4}
+              />
+              <TableCell className="bg-green-50 dark:bg-green-950/20 text-right font-mono text-xs font-semibold">
+                {formatUSD(grandTotal.revenueUSD)}
+              </TableCell>
+            </TableRow>
+            <TableRow>
+              <TableCell className="font-semibold text-xs">
+                ARPU (₡)
               </TableCell>
               <TableCell
                 colSpan={4}
               />
               <TableCell className="text-right font-mono text-xs font-semibold">
-                {formatUSD(grandTotal.arpu)}
+                {formatCRC(grandTotal.arpu)}
               </TableCell>
             </TableRow>
           </TableFooter>

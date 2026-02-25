@@ -6,7 +6,7 @@ export interface PricingTier {
   plan: PlanSlug;
   period: PeriodSlug;
   moduleCount: ModuleCount;
-  priceUSD: number;
+  priceCRC: number;
 }
 
 export interface TierInput extends PricingTier {

@@ -13,14 +13,14 @@ import {
 import { DEFAULT_TRAMOS_ISR } from "../constants";
 
 describe("calcularIngresoPorTier", () => {
-  it("multiplies users by price and converts to CRC", () => {
-    const result = calcularIngresoPorTier(100, 4.99, 485);
-    expect(result.usd).toBeCloseTo(499);
-    expect(result.crc).toBeCloseTo(499 * 485);
+  it("multiplies users by CRC price and converts to USD", () => {
+    const result = calcularIngresoPorTier(100, 2_500, 485);
+    expect(result.crc).toBeCloseTo(250_000);
+    expect(result.usd).toBeCloseTo(250_000 / 485);
   });
 
   it("returns zero for zero users", () => {
-    const result = calcularIngresoPorTier(0, 14.99, 485);
+    const result = calcularIngresoPorTier(0, 7_000, 485);
     expect(result.usd).toBe(0);
     expect(result.crc).toBe(0);
   });
@@ -29,27 +29,30 @@ describe("calcularIngresoPorTier", () => {
 describe("calcularIngresoMensualNormalizado", () => {
   it("normalizes quarterly to monthly (÷3)", () => {
     const tiers = [
-      { plan: "basico" as const, period: "trimestral" as const, moduleCount: 1 as const, priceUSD: 12.49, usuarios: 10 },
+      { plan: "basico" as const, period: "trimestral" as const, moduleCount: 1 as const, priceCRC: 6_000, usuarios: 10 },
     ];
     const result = calcularIngresoMensualNormalizado(tiers, 485);
-    expect(result.usd).toBeCloseTo(41.633, 2);
+    expect(result.crc).toBeCloseTo(20_000);
+    expect(result.usd).toBeCloseTo(20_000 / 485);
   });
 
   it("normalizes annual to monthly (÷12)", () => {
     const tiers = [
-      { plan: "pro" as const, period: "anual" as const, moduleCount: 1 as const, priceUSD: 119.99, usuarios: 5 },
+      { plan: "pro" as const, period: "anual" as const, moduleCount: 1 as const, priceCRC: 50_400, usuarios: 5 },
     ];
     const result = calcularIngresoMensualNormalizado(tiers, 485);
-    expect(result.usd).toBeCloseTo(49.996, 2);
+    expect(result.crc).toBeCloseTo(21_000);
+    expect(result.usd).toBeCloseTo(21_000 / 485);
   });
 
   it("sums across multiple tiers", () => {
     const tiers = [
-      { plan: "basico" as const, period: "mensual" as const, moduleCount: 1 as const, priceUSD: 4.99, usuarios: 100 },
-      { plan: "plus" as const, period: "mensual" as const, moduleCount: 2 as const, priceUSD: 14.49, usuarios: 50 },
+      { plan: "basico" as const, period: "mensual" as const, moduleCount: 1 as const, priceCRC: 2_500, usuarios: 100 },
+      { plan: "plus" as const, period: "mensual" as const, moduleCount: 2 as const, priceCRC: 7_200, usuarios: 50 },
     ];
     const result = calcularIngresoMensualNormalizado(tiers, 485);
-    expect(result.usd).toBeCloseTo(1223.5);
+    expect(result.crc).toBeCloseTo(610_000);
+    expect(result.usd).toBeCloseTo(610_000 / 485);
   });
 });
 

@@ -9,15 +9,15 @@ import type {
 
 const buildTiers = (): PricingTier[] => {
   const prices: Record<string, number[]> = {
-    "basico-mensual": [4.99, 7.99, 9.99, 11.99],
-    "basico-trimestral": [12.49, 19.99, 24.99, 29.99],
-    "basico-anual": [39.99, 63.99, 79.99, 95.99],
-    "plus-mensual": [8.99, 14.49, 17.99, 21.49],
-    "plus-trimestral": [22.49, 36.49, 44.99, 53.99],
-    "plus-anual": [71.99, 115.99, 143.99, 171.99],
-    "pro-mensual": [14.99, 23.99, 29.99, 35.99],
-    "pro-trimestral": [37.49, 59.99, 74.99, 89.99],
-    "pro-anual": [119.99, 191.99, 239.99, 287.99],
+    "basico-mensual": [2_500, 4_000, 5_000, 6_000],
+    "basico-trimestral": [6_000, 9_600, 12_000, 13_500],
+    "basico-anual": [18_000, 28_800, 36_000, 40_000],
+    "plus-mensual": [4_500, 7_200, 9_000, 10_800],
+    "plus-trimestral": [10_800, 17_280, 21_600, 24_300],
+    "plus-anual": [32_400, 51_840, 64_800, 72_000],
+    "pro-mensual": [7_000, 11_200, 14_000, 16_800],
+    "pro-trimestral": [16_800, 26_880, 33_600, 37_800],
+    "pro-anual": [50_400, 80_640, 100_800, 112_000],
   };
 
   const tiers: PricingTier[] = [];
@@ -28,7 +28,7 @@ const buildTiers = (): PricingTier[] => {
         plan,
         period,
         moduleCount: (i + 1) as PricingTier["moduleCount"],
-        priceUSD: price,
+        priceCRC: price,
       });
     });
   }
@@ -46,18 +46,18 @@ export const DEFAULT_TRAMOS_ISR: TramoISR[] = [
 
 export const DEFAULT_GASTOS: GastoOperativo[] = [
   { concepto: "Hosting / Servidores (AWS, GCP, Azure)", montoMensualCRC: 0, detalle: "Modifique según su caso" },
-  { concepto: "Dominio y certificados SSL", montoMensualCRC: 1_000, detalle: "Modifique según su caso" },
-  { concepto: "Licencias de software / APIs / herramientas", montoMensualCRC: 55_000, detalle: "Modifique según su caso" },
+  { concepto: "Dominio y certificados SSL", montoMensualCRC: 0, detalle: "Modifique según su caso" },
+  { concepto: "Licencias de software / APIs / herramientas", montoMensualCRC: 70_000, detalle: "Modifique según su caso" },
   { concepto: "Internet y telecomunicaciones", montoMensualCRC: 0, detalle: "Modifique según su caso" },
-  { concepto: "Contabilidad y asesoría legal", montoMensualCRC: 0, detalle: "Modifique según su caso" },
+  { concepto: "Contabilidad y asesoría legal", montoMensualCRC: 30_000, detalle: "Modifique según su caso" },
   { concepto: "Publicidad y marketing digital", montoMensualCRC: 0, detalle: "Modifique según su caso" },
   { concepto: "Cuenta de desarrollador Apple ($99/año)", montoMensualCRC: 4_001, detalle: "~$99/12 mensualizado" },
   { concepto: "Cuenta de desarrollador Google ($25 único)", montoMensualCRC: 1_010, detalle: "Pago único prorrateado" },
-  { concepto: "Otros gastos deducibles", montoMensualCRC: 0, detalle: "Modifique según su caso" },
+  { concepto: "Otros gastos deducibles", montoMensualCRC: 5_833, detalle: "Modifique según su caso" },
 ];
 
 export const DEFAULT_DISTRIBUCION: DistribucionLinea[] = [
-  { nombre: "Apps (In-App via Google/Apple)", porcentaje: 1, comisionPlataforma: 0.0425 },
+  { nombre: "Apps (In-App via Google/Apple)", porcentaje: 1, comisionPlataforma: 0.15 },
   { nombre: "Apps (In-App via SINPE Móvil)", porcentaje: 0, comisionPlataforma: 0 },
   { nombre: "SaaS (Suscripciones)", porcentaje: 0, comisionPlataforma: 0.035 },
   { nombre: "Productos a la medida (Web/IA)", porcentaje: 0, comisionPlataforma: 0.035 },
@@ -71,7 +71,7 @@ export const DEFAULT_SUPUESTOS: Supuestos = {
   umbralTarifaPlena: 112_170_000,
   tasaPlena: 0.3,
   tasaDividendos: 0.15,
-  comisionInApp: 0.0425,
+  comisionInApp: 0.15,
   comisionSINPE: 0,
   comisionPasarela: 0,
   patenteMunicipal: 0,
@@ -110,7 +110,7 @@ export const VOLUMENES_CPC = [100, 500, 1_000, 5_000, 10_000];
 
 export const DESCUENTO_TODOS_ESPACIOS = 0.25;
 
-export const COSTO_IA_POR_USUARIO_MES_USD = 0.36;
+export const COSTO_IA_POR_USUARIO_MES_USD = 1;
 
 export const PLAN_LABELS: Record<string, string> = {
   basico: "Básico",

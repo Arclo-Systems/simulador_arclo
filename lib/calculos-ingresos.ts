@@ -7,11 +7,11 @@ import type {
 
 export function calcularIngresoPorTier(
   usuarios: number,
-  precioUSD: number,
+  precioCRC: number,
   tipoCambio: number
 ): { usd: number; crc: number } {
-  const usd = usuarios * precioUSD;
-  return { usd, crc: usd * tipoCambio };
+  const crc = usuarios * precioCRC;
+  return { crc, usd: crc / tipoCambio };
 }
 
 const PERIOD_DIVISOR: Record<string, number> = {
@@ -24,12 +24,12 @@ export function calcularIngresoMensualNormalizado(
   tiers: TierInput[],
   tipoCambio: number
 ): { usd: number; crc: number } {
-  let totalUSD = 0;
+  let totalCRC = 0;
   for (const tier of tiers) {
-    const ingresoTotal = tier.usuarios * tier.priceUSD;
-    totalUSD += ingresoTotal / PERIOD_DIVISOR[tier.period];
+    const ingresoTotal = tier.usuarios * tier.priceCRC;
+    totalCRC += ingresoTotal / PERIOD_DIVISOR[tier.period];
   }
-  return { usd: totalUSD, crc: totalUSD * tipoCambio };
+  return { crc: totalCRC, usd: totalCRC / tipoCambio };
 }
 
 export function calcularComisiones(
